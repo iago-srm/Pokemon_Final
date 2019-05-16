@@ -1,0 +1,56 @@
+12
+2
+Bulbasaur 
+Ivysaur 
+Venusaur 
+Charmander 
+Charmeleon
+Charizard 
+Squirtle
+Wartortle 
+Blastoise 
+Caterpie 
+Metapod
+Butterfree
+Absorb 
+Acid 
+Agility 
+Aurora Beam 
+Barrage 
+Barrier 
+Bide 
+Bind
+Bite 
+Blizzard 
+Body Slam 
+Bone Club 
+Bonemerang 
+Bubble 
+Bubblebeam 
+Clamp
+Comet Punch 
+Confuse Ray 
+Confusion
+Constrict 
+Conversion 
+Counter 
+Crabhammer 
+Cut
+Defense Curl 
+Dig 
+Swift 
+Disable 
+Dizzy Punch 
+Double Kick 
+Double Team 
+Double-edge 
+Doubleslap
+Dragon Rage 
+Drill Peck 
+Earthquake 
+Egg Bomb
+Ember 
+Explosion 
+Fire Blast 
+Fire Punch 
+
