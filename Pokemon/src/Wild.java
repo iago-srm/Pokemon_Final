@@ -7,7 +7,7 @@ public class Wild extends Player {
 	public Wild(int specMoves, int player, int holdsPokemon) {
 		super(specMoves, 2, 1);
 		
-		heals = 0;
+		valorCura = 0;
 	}
 	
 	@Override

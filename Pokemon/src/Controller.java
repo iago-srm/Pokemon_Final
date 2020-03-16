@@ -10,7 +10,7 @@ class EventSet {
 
 		if (index >= events.length)
 
-			return; // (In real life, throw exception)
+			return; 
 
 		events[index++] = e;
 
@@ -57,6 +57,7 @@ class EventSet {
 
 public class Controller {
 
+	
 	private EventSet es = new EventSet();
 
 	public void addEvent(Event c) {

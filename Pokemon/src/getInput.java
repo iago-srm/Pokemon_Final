@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+//Classe que ajuda a obter input do usuÃ¡rio pelo teclado. Cada construtor cria um objeto que vai obter um tipo de input diferente.
 public class getInput{
 	
 	int min, max;
@@ -8,11 +9,13 @@ public class getInput{
 	
 	public getInput() {}
 
+	//Input numÃ©rico (inteiro) no intervalo [min,max]
 	public getInput(int min, int max) {
 		this.min = min;
 		this.max = max;
 	}
 	
+	//Input de String, dentre as possibilidades
 	public getInput(String...possible){
 		this.possible = possible;
 	}
@@ -30,7 +33,7 @@ public class getInput{
 				}
 			}
 			if(ok!=1) {
-				System.out.println("Favor inserir uma opção válida");
+				System.out.println("Favor inserir uma opï¿½ï¿½o vï¿½lida");
 				inp = scan.nextLine();
 			}
 		}
@@ -51,7 +54,7 @@ public class getInput{
 				}
 			}
 			if(ok!=1) {
-				System.out.println("Favor inserir uma opção válida");
+				System.out.println("Favor inserir uma opï¿½ï¿½o vï¿½lida");
 				inp = scan.nextLine();
 			}
 		}
@@ -68,18 +71,18 @@ public class getInput{
 		while(ok!=1) {
 			inp = scan.nextLine();
 			
-			//Pega não números
+			//Pega nï¿½o nï¿½meros
 			try {
 				input = Integer.parseInt(inp);
 			}
 			catch (Exception e) {
-				System.out.println("Favor inserir um número.");
+				System.out.println("Favor inserir um nï¿½mero.");
 				continue;
 			}
 			
-			//Pega números inválidos
+			//Pega nï¿½meros invï¿½lidos
 			if(input < min || input > max) {
-				System.out.println("Favor inserir um número válido.");
+				System.out.println("Favor inserir um nï¿½mero vï¿½lido.");
 			}else
 				ok=1;
 		}
@@ -97,18 +100,18 @@ public class getInput{
 			while(ok!=1) {
 				inp = scan.nextLine();
 				
-				//Pega não números
+				//Pega nï¿½o nï¿½meros
 				try {
 					input = Integer.parseInt(inp);
 				}
 				catch (Exception e) {
-					System.out.println("Favor inserir um número.");
+					System.out.println("Favor inserir um nï¿½mero.");
 					continue;
 				}
 				
-				//Pega números inválidos
+				//Pega nï¿½meros invï¿½lidos
 				if(input < min || input > max) {
-					System.out.println("Favor inserir um número válido.");
+					System.out.println("Favor inserir um nï¿½mero vï¿½lido.");
 				}else
 					ok=1;
 			}

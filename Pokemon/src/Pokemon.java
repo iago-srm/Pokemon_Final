@@ -43,12 +43,12 @@ public class Pokemon {
 		return choice; 
 	}
 	
-	public void heal(int heal) {
+	public void heal(int valorHeal) {
 		
-		if(hp + heal >= 100) 
+		if(hp + valorHeal >= 100) 
 			hp = 100;		
 		else
-			hp += heal;
+			hp += valorHeal;
 		
 	}
 	
@@ -64,7 +64,7 @@ public class Pokemon {
 	public Pokemon(String nom, String attck1, String attck2, String descr1, String descr2) {
 		nome = nom;
 		attacks[0] = new Attack("Investida",15,0,"Quase uma ombrada");
-		attacks[1] = new Attack("Ataque Forte",30,0.1,"Uma cabeçada dolorida");
+		attacks[1] = new Attack("Ataque Forte",30,0.1,"Uma cabeï¿½ada dolorida");
 		attacks[2] = new Attack(attck1,40,0.2,descr1);
 		attacks[3] = new Attack(attck2,40,0.2,descr2);
 	}

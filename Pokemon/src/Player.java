@@ -1,3 +1,4 @@
+import java.util.*;
 import java.util.Random;
 
 public class Player {
@@ -6,8 +7,13 @@ public class Player {
 	getInput inp = new getInput();
 	Mapa mapa;
 	
-	int heals = 5; //itens de cura disponÌveis para este jogador
-	int holdsPokemon;
+	static int valorCura = 5;
+	static int wildPokemon = 2;
+
+	Map<String, Integer> itens = new HashMap<String, Integer>() {{
+        put("heal", 5); //Jogador tem 5 itens de cura
+    }};
+	int holdsPokemon; //Com quantos Pok√©mon o jogador come√ßa
 	
 	String pokemon_names[] = new String[6];
 	Pokemon pokemons[] = new Pokemon[6];
@@ -15,19 +21,20 @@ public class Player {
 	String pokemon_moves_descr[];
 	
 	int specMoves;
-	int pokemon_ativo;
-	int living_pokemon;
-	int x,y;
-	boolean grass;
+	int pokemon_ativo; //√çndice da lista de Pok√©mon em que se encontra o ativo
+	int living_pokemon; //Quantos Pok√©mon vivos ainda restam
+	int x,y; //Coordenadas atuais
+	boolean grass; //Diz se o jogador est√° sobre a grama
 	
 	Battle_Controller bc;
 	
+	//Insere o jogador numa posi√ß√£o inicial aleat√≥ria
 	public void setInitialPosition(Mapa mapa) {
 		Random rand = new Random();
 		this.mapa = mapa;
 		this.x = rand.nextInt(mapa.mapa_cols);
 		this.y = rand.nextInt(mapa.mapa_rows);
-		if(mapa.mapa[x][y] == '/') {
+		if(mapa.mapa[x][y] == Mapa.gramaSymbol) {
 			this.grass = true;
 		}else {
 			this.grass = false;
@@ -36,6 +43,7 @@ public class Player {
 		System.out.println("Jogador "+num+" @ ("+x+","+y+")");
 	}
 	
+	//Recebe a dire√ß√£o escolhida e atualiza o mapa e a posi√ß√£o do jogador
 	public void updatePosition(char choice) {
 		switch(choice) {
 		
@@ -53,7 +61,7 @@ public class Player {
 			break;
 		}
 		
-		if(mapa.mapa[x][y] == '/') {
+		if(mapa.mapa[x][y] == Mapa.gramaSymbol) {
 			grass = true;
 		} else {
 			grass = false;
@@ -63,16 +71,17 @@ public class Player {
 		//System.out.println("Grass: "+grass);
 	}
 	
+	//Checa se √© poss√≠vel trocar de Pok√©mon, prompta pela op√ß√£o e realiza a troca
 	public void trocarPokemon() {
 		int ok = 0;
 		int choice = 0;
 		
 		if(living_pokemon == 1) {
-			System.out.println("VocÍ n„o tem PokÈmon para trocar.");
+			System.out.println("VocÔøΩ nÔøΩo tem PokÔøΩmon para trocar.");
 			return;
 		}
 		
-		System.out.println("Jogador "+num+", selecione seu novo PokÈmon:");
+		System.out.println("Jogador "+num+", selecione seu novo PokÔøΩmon:");
 		Pokemon p;
 		
 		for(int i=0; i<living_pokemon; i++) {
@@ -82,32 +91,55 @@ public class Player {
 		while(ok != 1) {
 			choice = inp.result_int(0,living_pokemon-1);
 			if(choice == pokemon_ativo) {
-				System.out.println("Este j· È seu PokemÛn ativo");
+				System.out.println("Este jÔøΩ ÔøΩ seu PokemÔøΩn ativo");
 			} else
 				ok=1;
 		}
 		pokemon_ativo = choice;
-		System.out.println("Seu PokÈmon ativo agora È "+pokemon_names[pokemon_ativo]);
+		System.out.println("Seu PokÔøΩmon ativo agora ÔøΩ "+pokemon_names[pokemon_ativo]);
 		
 	}
 	
-	public String usarItem(int heal) {
+	private String usarCura(){
 		
-		System.out.println("Jogador "+num+", deseja utilizar cura em qual PokÈmon?");
+		System.out.println("Jogador "+num+", deseja utilizar cura em qual PokÔøΩmon?");
 		Pokemon p;
-		int choice;
+		
 		for(int i=0; i<living_pokemon; i++) {
 			p = pokemons[i];
 			System.out.println(i+" "+p.nome+"; hp = "+p.hp);
 		}
-		choice = inp.result_int(0,living_pokemon-1);
-		p = pokemons[choice];
-		p.heal(heal);
-		heals--;
-		return p.nome;
+
+		int choice = inp.result_int(0,living_pokemon-1);
+
+		p = pokemons[choice]; //pega o Pok√©mon escolhido
+		p.heal(valorCura); //Cura o Pok√©mon
+		itens.put("heal", itens.get("heal") - 1); //Decrementa itens dispon√≠veis
+		return p.nome; 
+	}
+
+	public String usarItem() {
+		
+		System.out.println("Jogador "+num+", deseja utilizar qual item?");
+		int i = 0;
+		for (Map.Entry<String,Integer> entry : itens.entrySet())  {
+			
+			System.out.println(i+ ") " +entry.getKey() + 
+							 " : " + entry.getValue()); 
+			i++;
+		}
+
+		int choice = inp.result_int(0,itens.size()-1);
+		switch(choice){
+			case 0:
+				return usarCura();
+			
+		}
+
+		return null;
 	}
 	
-	//Verifica se todos os PokÈmon est„o vivos e, se tiver havido mortes, elicita
+	//Verifica se todos os PokÔøΩmon estÔøΩo vivos e, se tiver havido mortes, elicita
 	// um novo pokemon ativo do usuario
 	public int checkPokemon() {
 
@@ -115,15 +147,15 @@ public class Player {
 		for(int i=0; i<living_pokemon; i++) {
 			
 			if (pokemons[i].hp <= 0){
-				if(num == 2) {
-					System.out.println("O PokÈmon selvagem morreu");
+				if(num == wildPokemon) {
+					System.out.println("O PokÔøΩmon selvagem morreu");
 				}else {
 					System.out.println("Jogador "+num+", seu "+pokemons[i].nome+
 						" morreu.");
 				}
 				living_pokemon--;
 				if(living_pokemon > 0) {
-					System.out.println("Selecione um novo PokÈmon ativo:");
+					System.out.println("Selecione um novo PokÔøΩmon ativo:");
 					pokemons[i] = pokemons[living_pokemon];
 					for(int j=0;j<living_pokemon;j++) {
 						System.out.println(j+") "+pokemons[j].nome+"; hp = "+
@@ -132,8 +164,8 @@ public class Player {
 					}
 					pokemon_ativo = inp.result_int(0,living_pokemon-1);
 				}else {
-					if(num != 2) {
-						System.out.println("Todos os seus Pokemon est„o mortos");
+					if(num != wildPokemon) {
+						System.out.println("Todos os seus Pokemon estÔøΩo mortos");
 					}
 					return 0;
 
@@ -146,7 +178,7 @@ public class Player {
 		
 	}
 	
-	//Verifica se n„o perdeu o jogo
+	//Verifica se nÔøΩo perdeu o jogo
 	public int checkLost() {
 		
 		int lost = 0;
@@ -161,14 +193,14 @@ public class Player {
 		
 	}
 	
-	//Seleciona o PokÈmon ativo e devolve seu ataque selecionado
+	//Seleciona o PokÔøΩmon ativo e devolve seu ataque selecionado
 	public Attack getAttack() {
 		Pokemon ativo = pokemons[pokemon_ativo];
 		System.out.println("Jogador "+num+", escolha o ataque de seu "+ativo.nome+":");
 		return ativo.getAttack();
 	}
 	
-	//Seleciona o PokÈmon ativo e o ataca
+	//Seleciona o PokÔøΩmon ativo e o ataca
 	public void getAttacked(Attack attck) {
 		Pokemon ativo = pokemons[pokemon_ativo];
 		ativo.getAttacked(attck);
@@ -180,7 +212,7 @@ public class Player {
 	}
 	
 	public void printEstadoAtual() {
-		System.out.println("Jogador "+num+" tem "+heals+" itens de cura.");
+		System.out.println("Jogador "+num+" tem "+itens.get("heal")+" itens de cura.");
 		Pokemon p;
 
 		for(int i=0; i<living_pokemon; i++) {
